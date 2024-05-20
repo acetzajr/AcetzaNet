@@ -2,8 +2,6 @@
 
 namespace Acetza.Muza.WaveNS;
 
-
-
 public partial class Wave : IEnumerable<IndexedValue<Frame>>
 {
     public IEnumerator<IndexedValue<Frame>> GetEnumerator()

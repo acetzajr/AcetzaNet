@@ -8,10 +8,12 @@ public partial class Wave
     {
         var format = WaveFormat.CreateIeeeFloatWaveFormat(FrameRate.Value, 2);
         using var waveFileWriter = new WaveFileWriter($"{path}.wav", format);
-        foreach (var iv in this)
+        foreach (var indexedFrame in this)
         {
-            waveFileWriter.WriteSample((float)iv.Value.Left);
-            waveFileWriter.WriteSample((float)iv.Value.Right);
+            foreach (var indexedChannel in indexedFrame.Value)
+            {
+                waveFileWriter.WriteSample((float)indexedChannel.Value);
+            }
         }
         return this;
     }

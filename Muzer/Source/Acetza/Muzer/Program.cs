@@ -14,8 +14,9 @@ class Program
         stopwatch.Stop();
         Console.WriteLine($"Running time: {stopwatch.Elapsed}");
     }
+
     private static void Main()
     {
-        Measure(Tests.Test0x0);
+        Measure(Tests.Test1);
     }
 }

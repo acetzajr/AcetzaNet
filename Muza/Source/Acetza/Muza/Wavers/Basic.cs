@@ -9,7 +9,7 @@ public class Basic(
     double duration = 1,
     double amplitude = 1,
     int frameRate = 44_100
-)
+) : Waver
 {
     public Primitive Primitive { get; set; } = primitive is null ? Primitives.Sin : primitive;
     public double Frequency { get; set; } = frequency;
