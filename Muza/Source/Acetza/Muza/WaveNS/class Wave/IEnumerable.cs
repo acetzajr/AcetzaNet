@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 
-namespace Acetza.Muza.Wave;
+namespace Acetza.Muza.WaveNS;
 
 
 

@@ -1,4 +1,4 @@
-﻿namespace Acetza.Muza.Wave;
+﻿namespace Acetza.Muza.WaveNS;
 
 public partial class Wave
 {

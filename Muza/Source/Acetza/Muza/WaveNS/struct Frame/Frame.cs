@@ -1,7 +1,8 @@
-﻿namespace Acetza.Muza.Wave;
+﻿namespace Acetza.Muza.WaveNS;
 public struct Frame(double left, double right)
 {
     public Frame() : this(0.0, 0.0) { }
+    public Frame(double sample) : this(sample, sample) { }
     public double Left { get; set; } = left;
     public double Right { get; set; } = right;
     public double this[int channel]

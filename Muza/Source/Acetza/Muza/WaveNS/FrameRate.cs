@@ -1,6 +1,6 @@
-﻿namespace Acetza.Muza.Wave;
+﻿namespace Acetza.Muza.WaveNS;
 
-public readonly struct FrameRate(int value) : IValueGetter<int>
+public readonly struct FrameRate(int value)
 {
     public FrameRate() : this(44_100) { }
     public int Value { get; } = value;

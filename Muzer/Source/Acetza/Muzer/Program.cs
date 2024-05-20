@@ -1,17 +1,21 @@
-﻿using Acetza.Muza.Wave;
+﻿using System.Diagnostics;
 
 namespace Acetza.Muzer;
 
+public delegate void TestFn();
+
 class Program
 {
+    static void Measure(TestFn fn)
+    {
+        var stopwatch = new Stopwatch();
+        stopwatch.Start();
+        fn();
+        stopwatch.Stop();
+        Console.WriteLine($"Running time: {stopwatch.Elapsed}");
+    }
     private static void Main()
     {
-        var wave = new Wave(0.001);
-        foreach (var iv in wave)
-        {
-            Console.WriteLine(iv.Index);
-            Console.WriteLine(iv.Value);
-        }
-        Console.WriteLine();
+        Measure(Tests.Test0x0);
     }
 }
