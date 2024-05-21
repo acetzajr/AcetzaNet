@@ -13,7 +13,7 @@ public partial class Enveloper(
     Transformer? attackTransformer = null,
     Transformer? decayTransformer = null,
     Transformer? releaseTransformer = null
-)
+) : Waver
 {
     public Waver Waver { get; set; } = waver is null ? new Basic() : waver;
     public double Attack { get; set; } = attack;
@@ -27,6 +27,11 @@ public partial class Enveloper(
         decayTransformer is null ? Transformers.Smooth : decayTransformer;
     public Transformer ReleaseTransformer { get; set; } =
         releaseTransformer is null ? Transformers.Smooth : releaseTransformer;
+    public double Frequency
+    {
+        get => Waver.Frequency;
+        set => Waver.Frequency = value;
+    }
 
     public Wave Generate()
     {

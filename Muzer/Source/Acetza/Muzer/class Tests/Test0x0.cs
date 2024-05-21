@@ -6,13 +6,11 @@ static partial class Tests
 {
     public static void Test0()
     {
-        var gen = new Basic();
-        gen.Generate().Save();
+        new Basic().Generate().Save();
     }
 
     public static void Test1()
     {
-        var gen = new Enveloper();
-        gen.Generate().Save();
+        new Enveloper().Generate().Save();
     }
 }
