@@ -2,7 +2,7 @@
 
 public partial class Wave
 {
-    public int Channels { get; }
+    public int ChannelsCount { get; }
     public FrameRate FrameRate { get; }
     public Frame this[int frame]
     {
@@ -24,7 +24,7 @@ public partial class Wave
             {
                 int additions = value - FramesCount;
                 for (int i = 0; i < additions; i++)
-                    _frames.Add(new Frame(0, Channels));
+                    _frames.Add(new Frame(0, ChannelsCount));
                 return;
             }
             int elements = FramesCount - value;

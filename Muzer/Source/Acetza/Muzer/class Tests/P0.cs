@@ -42,7 +42,7 @@ static partial class Tests
             wave.Add(synth.Wave, time);
             time += (double)step;
         }
-        wave.Normalize().Save("acetza");
+        wave.Normalize().Play();
     }
 
     public static void Basic()

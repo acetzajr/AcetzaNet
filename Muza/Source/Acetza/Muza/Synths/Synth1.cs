@@ -9,7 +9,11 @@ public class Synth1 : IBlock
     public Synth1()
     {
         _block = new Enveloper(
-            block: new Harmonizer(block: new Basic(primitive: Primitives.Sqr)),
+            block: new Harmonizer(
+                block: new Basic(primitive: Primitives.Sin),
+                numberer: Numberers.Fib,
+                amplituder: Amplituders.Standar
+            ),
             attack: .025,
             hold: .1,
             release: .1
