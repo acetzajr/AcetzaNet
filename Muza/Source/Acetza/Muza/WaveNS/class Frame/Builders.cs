@@ -10,4 +10,11 @@ public partial class Frame
         foreach (var channel in this)
             this[channel] = fill;
     }
+
+    public Frame(Frame frame)
+    {
+        _samples = new double[frame.ChannelsCount];
+        foreach (var channel in frame)
+            _samples[channel] = frame[channel];
+    }
 }

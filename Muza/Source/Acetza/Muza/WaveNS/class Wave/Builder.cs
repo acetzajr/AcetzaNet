@@ -13,4 +13,14 @@ public partial class Wave
             _frames.Add(new Frame(0, Channels));
         }
     }
+
+    public Wave(Wave wave)
+    {
+        Channels = wave.Channels;
+        FrameRate = wave.FrameRate;
+        var framesCount = wave.FramesCount;
+        _frames = new List<Frame>(framesCount);
+        foreach (var frame in wave)
+            _frames.Add((Frame)wave[frame].Clone());
+    }
 }
