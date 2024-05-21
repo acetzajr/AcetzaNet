@@ -20,7 +20,6 @@ public partial class Wave
         var max = Max;
         if (max == 0)
             return this;
-
-        return this;
+        return this / max;
     }
 }

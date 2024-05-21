@@ -17,6 +17,6 @@ class Program
 
     private static void Main()
     {
-        Measure(Tests.Test1);
+        Measure(Tests.Harmonizer);
     }
 }

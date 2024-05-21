@@ -4,13 +4,18 @@ namespace Acetza.Muzer;
 
 static partial class Tests
 {
-    public static void Test0()
+    public static void Basic()
     {
         new Basic().Generate().Save();
     }
 
-    public static void Test1()
+    public static void Enveloper()
     {
         new Enveloper().Generate().Save();
+    }
+
+    public static void Harmonizer()
+    {
+        new Harmonizer().Generate().Save();
     }
 }

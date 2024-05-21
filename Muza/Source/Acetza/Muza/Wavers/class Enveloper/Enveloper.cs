@@ -32,6 +32,11 @@ public partial class Enveloper(
         get => Waver.Frequency;
         set => Waver.Frequency = value;
     }
+    public double Amplitude
+    {
+        get => Waver.Amplitude;
+        set => Waver.Amplitude = value;
+    }
 
     public Wave Generate()
     {

@@ -22,6 +22,11 @@ public class Harmonizer(
         get => Fundamental.Frequency;
         set => Fundamental.Frequency = value;
     }
+    public double Amplitude
+    {
+        get => Fundamental.Amplitude;
+        set => Fundamental.Amplitude = value;
+    }
 
     public Wave Generate()
     {
@@ -30,33 +35,11 @@ public class Harmonizer(
         {
             var number = Numberer(index);
             Harmonics.Frequency = Frequency * number;
+            Harmonics.Amplitude = Amplituder(index, number, Depth);
             wave.Add(Harmonics.Generate());
         }
         wave.Normalize();
+        wave *= Amplitude;
         return wave;
     }
-    /*
-     * public static Wave Fn(Args args)
-        {
-            var wave = new Wave(args.Duration);
-            int harmonicIndex = 1;
-            var envelopeArgs = new Envelope.Args
-            {
-                Envelope = args.Envelope,
-                Generator = args.Generator,
-                Duration = args.Duration
-            };
-            do
-            {
-                int harmonicNumber = args.Numberer(harmonicIndex);
-                envelopeArgs.Frequency = args.Frequency * harmonicNumber;
-                var harmonic = Envelope
-                    .Fn(envelopeArgs)
-                    .Multiply(args.Amplituder(harmonicIndex, harmonicNumber, args.HarmonicsCount));
-                wave.Add(harmonic);
-            } while (harmonicIndex++ < args.HarmonicsCount);
-            wave.Normalize();
-            return wave;
-        }
-     * */
 }
