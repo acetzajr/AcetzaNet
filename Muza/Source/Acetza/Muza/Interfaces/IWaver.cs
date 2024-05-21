@@ -1,6 +1,6 @@
 ﻿using Acetza.Muza.WaveNS;
 
-namespace Acetza.Muza;
+namespace Acetza.Muza.Interfaces;
 
 public interface IWaver
 {
