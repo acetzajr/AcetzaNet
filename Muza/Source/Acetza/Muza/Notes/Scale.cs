@@ -30,10 +30,10 @@ public class Scale(Rational[] rationals, double baseFrequency = 360)
 
     public double Frequency(int note)
     {
-        return (double)this[Note(note)] * Math.Pow(2, Power(note));
+        return Base * (double)this[Note(note)] * Math.Pow(2, Power(note));
     }
 
-    public static Scale Acetza()
+    public static Scale Acetza(double baseFrequency = 360)
     {
         return new Scale(
             [
@@ -48,7 +48,8 @@ public class Scale(Rational[] rationals, double baseFrequency = 360)
                 (Rational)27 / 16,
                 (Rational)16 / 9,
                 (Rational)243 / 128
-            ]
+            ],
+            baseFrequency
         );
     }
 }

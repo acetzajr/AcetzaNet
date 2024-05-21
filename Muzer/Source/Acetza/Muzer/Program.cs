@@ -2,8 +2,6 @@
 
 namespace Acetza.Muzer;
 
-public delegate void TestFn();
-
 class Program
 {
     static void Measure(TestFn fn)
@@ -17,6 +15,6 @@ class Program
 
     private static void Main()
     {
-        Measure(Tests.Test1);
+        Measure(Tests.Selected);
     }
 }

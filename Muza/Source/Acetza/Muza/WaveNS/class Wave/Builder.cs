@@ -2,6 +2,13 @@
 
 public partial class Wave
 {
+    public Wave(int channels = 2, int frameRate = 44_100)
+    {
+        Channels = channels;
+        FrameRate = new FrameRate(frameRate);
+        _frames = [];
+    }
+
     public Wave(double duration, int channels = 2, int frameRate = 44_100)
     {
         Channels = channels;

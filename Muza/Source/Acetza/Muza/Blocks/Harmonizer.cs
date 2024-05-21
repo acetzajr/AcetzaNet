@@ -36,14 +36,14 @@ public class Harmonizer(
         get
         {
             var wave = Block.Wave;
-            var frequency = Block.Frequency;
+            var frequency = Frequency;
             for (int index = 2; index <= Depth; index++)
             {
                 var number = Numberer(index);
-                Block.Frequency = Frequency * number;
+                Frequency = frequency * number;
                 wave.Add(Block.Wave, amplitude: Amplituder(index, number, Depth));
             }
-            Block.Frequency = frequency;
+            Frequency = frequency;
             wave.Normalize();
             wave *= Amplitude;
             return wave;
