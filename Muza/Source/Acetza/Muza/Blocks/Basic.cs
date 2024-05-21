@@ -1,7 +1,7 @@
 ﻿using Acetza.Muza.Functions;
 using Acetza.Muza.WaveNS;
 
-namespace Acetza.Muza.Wavers;
+namespace Acetza.Muza.Blocks;
 
 public class Basic(
     Primitive? primitive = null,
@@ -10,7 +10,7 @@ public class Basic(
     double amplitude = 1,
     int channels = 2,
     int frameRate = 44_100
-) : Waver
+) : IBlock
 {
     public Primitive Primitive { get; set; } = primitive is null ? Primitives.Sin : primitive;
     public double Frequency { get; set; } = frequency;
@@ -19,16 +19,19 @@ public class Basic(
     public int Channels { get; set; } = channels;
     public int FrameRate { get; set; } = frameRate;
 
-    public Wave Generate()
+    public Wave Wave
     {
-        var wave = new Wave(Duration, Channels, FrameRate);
-        foreach (var frame in wave)
+        get
         {
-            var time = wave.FrameRate.IndexToTime(frame);
-            var part = time * Frequency % 1.0;
-            var sample = Primitive(part) * Amplitude;
-            wave[frame] = new(sample);
+            var wave = new Wave(Duration, Channels, FrameRate);
+            foreach (var frame in wave)
+            {
+                var time = wave.FrameRate.IndexToTime(frame);
+                var part = time * Frequency % 1.0;
+                var sample = Primitive(part) * Amplitude;
+                wave[frame] = new(sample);
+            }
+            return wave;
         }
-        return wave;
     }
 }

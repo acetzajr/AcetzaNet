@@ -1,6 +1,6 @@
 ﻿using Acetza.Muza.WaveNS;
 
-namespace Acetza.Muza.Wavers;
+namespace Acetza.Muza.Blocks;
 
 public partial class Enveloper
 {
