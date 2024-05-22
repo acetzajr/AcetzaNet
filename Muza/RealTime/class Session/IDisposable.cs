@@ -1,23 +1,7 @@
 ﻿namespace Muza.RealTime;
 
-public class Session : IDisposable
+public partial class Session : IDisposable
 {
-    public Session()
-    {
-        _midiManager = new MidiManager();
-    }
-
-    public void Start()
-    {
-        Console.WriteLine("Press enter to exit...");
-        _midiManager.Start();
-        Console.ReadLine();
-        _midiManager.Stop();
-    }
-
-    private readonly MidiManager _midiManager;
-
-    // Dispose pattern
     private bool disposedValue;
 
     protected virtual void Dispose(bool disposing)

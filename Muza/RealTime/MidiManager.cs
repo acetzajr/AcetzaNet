@@ -4,12 +4,16 @@ namespace Muza.RealTime;
 
 public class MidiManager : IDisposable
 {
+    public delegate void NoteEventHandler(string name, int number, int velocity);
+    public event NoteEventHandler? NoteOn;
+    public event NoteEventHandler? NoteOff;
+
     public MidiManager()
     {
         _deviceNumber = ChooseDevice();
         _midiIn = new MidiIn(_deviceNumber);
-        _midiIn.MessageReceived += MidiInMessageReceived;
-        _midiIn.ErrorReceived += MidiInErrorReceived;
+        _midiIn.MessageReceived += MessageReceived;
+        _midiIn.ErrorReceived += ErrorReceived;
     }
 
     public void Start()
@@ -22,7 +26,7 @@ public class MidiManager : IDisposable
         _midiIn.Stop();
     }
 
-    void MidiInErrorReceived(object? sender, MidiInMessageEventArgs message)
+    void ErrorReceived(object? sender, MidiInMessageEventArgs message)
     {
         Console.WriteLine(
             string.Format(
@@ -34,15 +38,19 @@ public class MidiManager : IDisposable
         );
     }
 
-    void MidiInMessageReceived(object? sender, MidiInMessageEventArgs message)
+    void MessageReceived(object? sender, MidiInMessageEventArgs message)
     {
         if (MidiEvent.IsNoteOn(message.MidiEvent))
         {
-            var noteOn = (NoteOnEvent)message.MidiEvent;
-            Console.WriteLine(noteOn.NoteName);
+            var ev = (NoteEvent)message.MidiEvent;
+            NoteOn?.Invoke(ev.NoteName, ev.NoteNumber, ev.Velocity);
+            return;
         }
-
-        //Console.WriteLine(message.MidiEvent.CommandCode);
+        if (MidiEvent.IsNoteOff(message.MidiEvent))
+        {
+            var ev = (NoteEvent)message.MidiEvent;
+            NoteOff?.Invoke(ev.NoteName, ev.NoteNumber, ev.Velocity);
+        }
     }
 
     public static int ChooseDevice()
