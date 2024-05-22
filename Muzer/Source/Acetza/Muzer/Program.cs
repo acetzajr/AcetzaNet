@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
+using Acetza.Muzer;
 
-namespace Acetza.Muzer;
+namespace Muzer.Source.Acetza.Muzer;
 
 class Program
 {

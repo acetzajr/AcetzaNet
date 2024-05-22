@@ -1,7 +1,7 @@
-﻿using Acetza.Muza.Blocks;
-using Acetza.Muza.Notes;
-using Acetza.Muza.Synths;
-using Acetza.Muza.WaveNS;
+﻿using Muza.Preprocess.Blocks;
+using Muza.Preprocess.Notes;
+using Muza.Preprocess.Synths;
+using Muza.Preprocess.WaveNS;
 using Rationals;
 
 namespace Acetza.Muzer;
