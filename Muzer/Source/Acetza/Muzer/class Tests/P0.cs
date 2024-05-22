@@ -2,6 +2,7 @@
 using Muza.Preprocess.Notes;
 using Muza.Preprocess.Synths;
 using Muza.Preprocess.WaveNS;
+using Muza.RealTime;
 using Rationals;
 
 namespace Acetza.Muzer;
@@ -10,7 +11,7 @@ public delegate void TestFn();
 
 static partial class Tests
 {
-    public static TestFn Selected = TestSynth;
+    public static TestFn Selected = Testing.Test;
 
     public static void TestScale()
     {
