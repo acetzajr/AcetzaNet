@@ -4,9 +4,10 @@ public partial class Session
 {
     public void Start()
     {
+        if (!StartPlaying())
+            return;
         Console.WriteLine("Press enter to exit...");
         _playing = true;
-        StartPlaying();
         _midiManager.Start();
         Console.ReadLine();
         _playing = false;

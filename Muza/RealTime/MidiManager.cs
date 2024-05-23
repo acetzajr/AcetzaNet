@@ -76,7 +76,7 @@ public class MidiManager : IDisposable
                 Console.WriteLine("Input must be a number, try again");
                 continue;
             }
-            if (deviceNumber >= MidiIn.NumberOfDevices)
+            if (deviceNumber >= MidiIn.NumberOfDevices || deviceNumber < 0)
             {
                 Console.WriteLine(
                     $"Input must be in range [0 -> {MidiIn.NumberOfDevices - 1}], try again"

@@ -14,6 +14,7 @@ class Program
         Console.WriteLine($"Running time: {stopwatch.Elapsed}");
     }
 
+    [STAThread]
     private static void Main()
     {
         Measure(Tests.Selected);

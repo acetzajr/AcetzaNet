@@ -13,8 +13,7 @@ public partial class Session
         );
         playThread = new Thread(Play);
         _synths = [];
-        _latency = 40;
-        _waveBuffer = new WaveBuffer(2, 360);
+        _waveBuffer = new WaveBuffer(2, 256);
         _waveBuffer.BlockRequested += BlockEventHandler;
         _mutex = new Mutex();
     }
