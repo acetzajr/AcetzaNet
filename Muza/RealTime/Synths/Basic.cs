@@ -40,7 +40,7 @@ public class Basic : ISynth
         {
             var time = state.Time + Constants.FrameRate.IndexToTime(frame);
             var part = time * frequency % 1.0;
-            var sample = Primitives.Tri(part) * 1.0 / 8.0;
+            var sample = Primitives.Tri(part) * 1.0 / 16;
             foreach (var channel in block.Channels)
             {
                 block[frame, channel] += sample;
@@ -55,14 +55,10 @@ public class Basic : ISynth
     {
         number -= 62;
         if (MzMath.PMod(number, 12) == 6)
-        {
             return null;
-        }
         var offsets = Math.Abs(number / 6);
         offsets = offsets % 2 == 1 ? (offsets + 1) / 2 : offsets / 2;
-        number = number < 0 ? number + offsets : number - offsets;
-        Console.WriteLine($"note: {number}");
-        return number;
+        return number < 0 ? number + offsets : number - offsets;
     }
 
     public void NoteOff(string name, int number, int velocity)
