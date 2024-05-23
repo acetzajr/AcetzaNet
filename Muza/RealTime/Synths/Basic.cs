@@ -34,12 +34,13 @@ public class Basic : ISynth
         public bool Playing { get; set; } = true;
     }
 
-    private readonly Scale _scale = Scale.Acetza();
+    private readonly Scale _scale = Scale.Acetza(180);
     private readonly Dictionary<int, PlayState> _dictionary = [];
     private readonly double _amplitude = 1.0 / 8;
     private readonly double _releaseDecrement = MzMath.FromDB(-45);
     private Queue<ReleaseState> _releasingQueue = [];
     private Queue<ReleaseState> _releasingSwap = [];
+    private readonly Primitive _primitive = Primitives.Saw;
 
     public void BeginProcess(WaveBuffer.Block block)
     {
@@ -66,7 +67,7 @@ public class Basic : ISynth
     {
         //Console.WriteLine($"state.Amplitude: {state.Amplitude}");
         //Console.WriteLine($"_releaseDecrement: {_releaseDecrement}");
-        foreach (var frame in block.Frames)
+        for (int frame = 0; frame < block.FramesCount; frame++)
         {
             state.Amplitude -= _releaseDecrement;
             if (state.Amplitude < 0)
@@ -76,7 +77,7 @@ public class Basic : ISynth
             }
             var time = state.Time + Constants.FrameRate.IndexToTime(frame);
             var part = time * state.Frequency % 1.0;
-            var sample = Primitives.Tri(part) * state.Amplitude * _amplitude;
+            var sample = _primitive(part) * state.Amplitude * _amplitude;
             foreach (var channel in block.Channels)
             {
                 block[frame, channel] += sample;
@@ -91,7 +92,7 @@ public class Basic : ISynth
         {
             var time = state.Time + Constants.FrameRate.IndexToTime(frame);
             var part = time * state.Frequency % 1.0;
-            var sample = Primitives.Tri(part) * state.Amplitude * _amplitude;
+            var sample = _primitive(part) * state.Amplitude * _amplitude;
             foreach (var channel in block.Channels)
             {
                 block[frame, channel] += sample;
