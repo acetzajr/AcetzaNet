@@ -67,8 +67,7 @@ public class Basic : ISynth
 
     public void NoteOff(string name, int number, int velocity)
     {
-        int? noteNullable = NormalizeNoteNumber(number);
-        if (noteNullable is int note)
+        if (NormalizeNoteNumber(number) is int note)
         {
             _dictionary[note].Playing = false;
         }
@@ -76,9 +75,7 @@ public class Basic : ISynth
 
     public void NoteOn(string name, int number, int velocity)
     {
-        //Console.WriteLine($"on > name: {name}, note: {number}");
-        int? noteNullable = NormalizeNoteNumber(number);
-        if (noteNullable is int note)
+        if (NormalizeNoteNumber(number) is int note)
         {
             if (_dictionary.TryGetValue(note, out PlayState? value))
             {
