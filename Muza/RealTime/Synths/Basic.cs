@@ -51,28 +51,43 @@ public class Basic : ISynth
 
     public void EndProcess(WaveBuffer.Block block) { }
 
-    private static int NormalizeNoteNumber(int number)
+    private static int? NormalizeNoteNumber(int number)
     {
-        return number - 62;
+        number -= 62;
+        if (MzMath.PMod(number, 12) == 6)
+        {
+            return null;
+        }
+        var offsets = Math.Abs(number / 6);
+        offsets = offsets % 2 == 1 ? (offsets + 1) / 2 : offsets / 2;
+        number = number < 0 ? number + offsets : number - offsets;
+        Console.WriteLine($"note: {number}");
+        return number;
     }
 
     public void NoteOff(string name, int number, int velocity)
     {
-        //Console.WriteLine($"off > name: {name}, note: {number}");
-        _dictionary[NormalizeNoteNumber(number)].Playing = false;
+        int? noteNullable = NormalizeNoteNumber(number);
+        if (noteNullable is int note)
+        {
+            _dictionary[note].Playing = false;
+        }
     }
 
     public void NoteOn(string name, int number, int velocity)
     {
         //Console.WriteLine($"on > name: {name}, note: {number}");
-        var note = NormalizeNoteNumber(number);
-        if (_dictionary.TryGetValue(note, out PlayState? value))
+        int? noteNullable = NormalizeNoteNumber(number);
+        if (noteNullable is int note)
         {
-            value.Reset();
-        }
-        else
-        {
-            _dictionary[note] = new PlayState();
+            if (_dictionary.TryGetValue(note, out PlayState? value))
+            {
+                value.Reset();
+            }
+            else
+            {
+                _dictionary[note] = new PlayState();
+            }
         }
     }
 }
