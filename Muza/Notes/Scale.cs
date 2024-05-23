@@ -1,6 +1,6 @@
 ﻿using Rationals;
 
-namespace Muza.Preprocess.Notes;
+namespace Muza.Notes;
 
 public class Scale(Rational[] rationals, double baseFrequency = 360)
 {

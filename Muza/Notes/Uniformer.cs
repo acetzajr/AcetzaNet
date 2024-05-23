@@ -1,4 +1,4 @@
-﻿namespace Muza.Preprocess.Notes;
+﻿namespace Muza.Notes;
 
 public static class Uniformer
 {

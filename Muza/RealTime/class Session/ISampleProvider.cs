@@ -8,10 +8,9 @@ public partial class Session : ISampleProvider
 
     public int Read(float[] buffer, int offset, int count)
     {
-        //Console.WriteLine($"count {count}");
         for (int i = 0; i < count; i++)
         {
-            buffer[offset++] = 0;
+            buffer[offset++] = (float)_waveBuffer.NextSample();
         }
         if (!_playing)
             return 0;

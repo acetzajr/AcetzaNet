@@ -7,13 +7,15 @@ public partial class Session
     public Session()
     {
         _midiManager = new MidiManager();
-        _midiManager.NoteOn += NoteOn;
-        _midiManager.NoteOff += NoteOff;
-        WaveFormat = WaveFormat.CreateIeeeFloatWaveFormat(Constants.FrameRate, Constants.Channels);
+        WaveFormat = WaveFormat.CreateIeeeFloatWaveFormat(
+            Constants.FrameRate.Value,
+            Constants.Channels
+        );
         playThread = new Thread(Play);
         _synths = [];
-        _waveBuffer = new WaveBuffer();
+        _latency = 40;
+        _waveBuffer = new WaveBuffer(2, 360);
         _waveBuffer.BlockRequested += BlockEventHandler;
-        _blockProcessingThread = new Thread(ProcessBlocks);
+        _mutex = new Mutex();
     }
 }

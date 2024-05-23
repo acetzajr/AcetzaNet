@@ -8,24 +8,16 @@ public partial class Session : IBlockHandler
     public void BlockEventHandler(WaveBuffer.Block block)
     {
         _blocks.Enqueue(block);
+        ThreadPool.QueueUserWorkItem(ProcessBlocks);
     }
 
-    void StartBlockProcessing()
+    void ProcessBlocks(object? state)
     {
-        _blockProcessingThread.Start();
-    }
-
-    void EndBlockProcessing()
-    {
-        _blockProcessingThread.Join();
-    }
-
-    void ProcessBlocks()
-    {
-        WaveBuffer.Block? block;
-        while (_playing)
+        _mutex.WaitOne();
+        bool working = true;
+        while (working)
         {
-            if (_blocks.TryDequeue(out block))
+            if (_blocks.TryDequeue(out WaveBuffer.Block? block))
             {
                 foreach (var synth in _synths)
                 {
@@ -35,11 +27,14 @@ public partial class Session : IBlockHandler
                 {
                     synth.EndProcess(block);
                 }
+                block.Ready = true;
+                working = false;
             }
         }
+        _mutex.ReleaseMutex();
     }
 
-    private readonly Thread _blockProcessingThread;
+    private readonly Mutex _mutex;
     private readonly WaveBuffer _waveBuffer;
     private readonly ConcurrentQueue<WaveBuffer.Block> _blocks = new();
 }

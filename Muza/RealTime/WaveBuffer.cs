@@ -33,6 +33,39 @@ public class WaveBuffer
             }
         }
 
+        public IEnumerable<int> Channels
+        {
+            get
+            {
+                for (int channel = 0; channel < ChannelsCount; channel++)
+                {
+                    yield return channel;
+                }
+                yield break;
+            }
+        }
+        public IEnumerable<int> Frames
+        {
+            get
+            {
+                for (int frame = 0; frame < FramesCount; frame++)
+                {
+                    yield return frame;
+                }
+                yield break;
+            }
+        }
+        public IEnumerable<int> Samples
+        {
+            get
+            {
+                for (int sample = 0; sample < SamplesCount; sample++)
+                {
+                    yield return sample;
+                }
+                yield break;
+            }
+        }
         readonly double[] _samples = new double[frames * channels];
     }
 
@@ -75,7 +108,10 @@ public class WaveBuffer
     private bool TryAdvance()
     {
         if (!_back[^1].Ready)
+        {
+            //Console.WriteLine("Not ready");
             return false;
+        }
         _sampleIndex = 0;
         Block swap = Current;
         swap.Empty();

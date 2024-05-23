@@ -12,6 +12,7 @@ public partial class Session : IDisposable
             {
                 // TODO: dispose managed state (managed objects)
                 _midiManager.Dispose();
+                _mutex.Dispose();
             }
 
             // TODO: free unmanaged resources (unmanaged objects) and override finalizer
