@@ -1,19 +1,17 @@
-﻿using Rationals;
+﻿namespace Muza.Notes;
 
-namespace Muza.Notes;
-
-public class Scale(Rational[] rationals, double baseFrequency = 360)
+public class Scale(double[] rations, double baseFrequency = 360)
 {
-    private readonly Rational[] _rationals = rationals;
+    private readonly double[] _rations = rations;
     public double Base { get; set; } = baseFrequency;
     public int Count
     {
-        get => _rationals.Length;
+        get => _rations.Length;
     }
-    public Rational this[int note]
+    public double this[int note]
     {
-        get => _rationals[note];
-        set => _rationals[note] = value;
+        get => _rations[note];
+        set => _rations[note] = value;
     }
 
     public int Note(int index)
@@ -37,17 +35,18 @@ public class Scale(Rational[] rationals, double baseFrequency = 360)
     {
         return new Scale(
             [
-                (Rational)1 / 1,
-                (Rational)256 / 243,
-                (Rational)9 / 8,
-                (Rational)32 / 27,
-                (Rational)81 / 64,
-                (Rational)4 / 3,
-                (Rational)3 / 2,
-                (Rational)128 / 81,
-                (Rational)27 / 16,
-                (Rational)16 / 9,
-                (Rational)243 / 128
+                (double)1 / 1,
+                (double)256 / 243,
+                (double)9 / 8,
+                (double)32 / 27,
+                (double)81 / 64,
+                (double)4 / 3,
+                EqualTempered.Frequency(6, baseFrequency: 1.0),
+                (double)3 / 2,
+                (double)128 / 81,
+                (double)27 / 16,
+                (double)16 / 9,
+                (double)243 / 128
             ],
             baseFrequency
         );

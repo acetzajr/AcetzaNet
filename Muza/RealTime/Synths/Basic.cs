@@ -34,13 +34,13 @@ public class Basic : ISynth
         public bool Playing { get; set; } = true;
     }
 
-    private readonly Scale _scale = Scale.Acetza(180);
+    private readonly Scale _scale = Scale.Acetza();
     private readonly Dictionary<int, PlayState> _dictionary = [];
     private readonly double _amplitude = 1.0 / 8;
     private readonly double _releaseDecrement = MzMath.FromDB(-45);
     private Queue<ReleaseState> _releasingQueue = [];
     private Queue<ReleaseState> _releasingSwap = [];
-    private readonly Primitive _primitive = Primitives.Saw;
+    private readonly Primitive _primitive = Primitives.Sqr;
 
     public void BeginProcess(WaveBuffer.Block block)
     {
@@ -103,14 +103,9 @@ public class Basic : ISynth
 
     public void EndProcess(WaveBuffer.Block block) { }
 
-    private static int? NormalizeNoteNumber(int number)
+    private static int NormalizeNoteNumber(int number)
     {
-        number -= 62;
-        if (MzMath.PMod(number, 12) == 6)
-            return null;
-        var offsets = Math.Abs(number / 6);
-        offsets = offsets % 2 == 1 ? (offsets + 1) / 2 : offsets / 2;
-        return number < 0 ? number + offsets : number - offsets;
+        return number - 62;
     }
 
     public void NoteOff(string name, int number, int velocity)
