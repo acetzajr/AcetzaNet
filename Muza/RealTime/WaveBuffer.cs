@@ -100,6 +100,7 @@ public class WaveBuffer
         {
             if (TryAdvance())
                 return Current[_sampleIndex++];
+            //Console.WriteLine("in need");
             return 0;
         }
         return Current[_sampleIndex++];
@@ -108,10 +109,7 @@ public class WaveBuffer
     private bool TryAdvance()
     {
         if (!_back[^1].Ready)
-        {
-            //Console.WriteLine("Not ready");
             return false;
-        }
         _sampleIndex = 0;
         Block swap = Current;
         swap.Empty();

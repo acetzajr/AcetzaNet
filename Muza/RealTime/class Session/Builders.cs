@@ -11,10 +11,8 @@ public partial class Session
             Constants.FrameRate.Value,
             Constants.Channels
         );
-        playThread = new Thread(Play);
+        _asioThread = new Thread(PlayAsio);
+        _playThread = new Thread(Play);
         _synths = [];
-        _waveBuffer = new WaveBuffer(1, 512);
-        _waveBuffer.BlockRequested += BlockEventHandler;
-        _mutex = new Mutex();
     }
 }

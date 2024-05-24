@@ -4,14 +4,28 @@ public partial class Session
 {
     public void Start()
     {
-        if (!StartPlaying())
-            return;
+        if (_useAsio)
+        {
+            if (!StartPlayingAsio())
+                return;
+        }
+        else
+        {
+            StartPlaying();
+        }
         Console.WriteLine("Press enter to exit...");
         _playing = true;
         _midiManager.Start();
         Console.ReadLine();
         _playing = false;
         _midiManager.Stop();
-        StopPlaying();
+        if (_useAsio)
+        {
+            StopPlayingAsio();
+        }
+        else
+        {
+            StopPlaying();
+        }
     }
 }

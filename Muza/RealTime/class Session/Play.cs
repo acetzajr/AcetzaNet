@@ -4,7 +4,35 @@ namespace Muza.RealTime;
 
 public partial class Session
 {
-    private bool StartPlaying()
+    private void StartPlaying()
+    {
+        _waveOut = new WaveOutEvent();
+        _waveOut.DesiredLatency = 64;
+        _waveBuffer = new WaveBuffer(
+            1,
+            (int)Math.Ceiling(_waveOut.DesiredLatency * Constants.FrameRate.Value / 1000.0)
+        );
+        _waveBuffer.BlockRequested += BlockEventHandler;
+        _waveOut.Init(this);
+        _waveOut.Play();
+        _playThread.Start();
+    }
+
+    private void Play()
+    {
+        while (_waveOut?.PlaybackState == PlaybackState.Playing)
+        {
+            Thread.Sleep(1000);
+        }
+    }
+
+    private void StopPlaying()
+    {
+        _waveOut?.Stop();
+        _playThread.Join();
+    }
+
+    private bool StartPlayingAsio()
     {
         var driver = ChooseDriver();
         _asio = new AsioOut(driver);
@@ -14,16 +42,18 @@ public partial class Session
             return false;
         }
         Console.WriteLine($"PlaybackLatency: {_asio.PlaybackLatency}");
+        _waveBuffer = new WaveBuffer(1, _asio.PlaybackLatency);
+        _waveBuffer.BlockRequested += BlockEventHandler;
         _asio.Init(this);
         _asio.Play();
-        playThread.Start();
+        _asioThread.Start();
         return true;
     }
 
-    private void StopPlaying()
+    private void StopPlayingAsio()
     {
         _asio?.Stop();
-        playThread.Join();
+        _asioThread.Join();
     }
 
     public static string ChooseDriver()
@@ -58,7 +88,7 @@ public partial class Session
         }
     }
 
-    private void Play()
+    private void PlayAsio()
     {
         while (_asio?.PlaybackState == PlaybackState.Playing)
         {

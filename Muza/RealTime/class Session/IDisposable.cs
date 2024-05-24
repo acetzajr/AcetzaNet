@@ -12,7 +12,7 @@ public partial class Session : IDisposable
             {
                 // TODO: dispose managed state (managed objects)
                 _midiManager.Dispose();
-                _mutex.Dispose();
+                _waveOut?.Dispose();
                 _asio?.Dispose();
             }
 

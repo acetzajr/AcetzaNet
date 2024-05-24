@@ -40,27 +40,35 @@ public class Basic : ISynth
     private readonly double _releaseDecrement = MzMath.FromDB(-45);
     private Queue<ReleaseState> _releasingQueue = [];
     private Queue<ReleaseState> _releasingSwap = [];
-    private readonly Primitive _primitive = Primitives.Sqr;
+    private readonly Primitive _primitive = Primitives.Sin;
+    private readonly object _dictionaryLock = new();
+    private readonly object _queueLock = new();
 
     public void BeginProcess(WaveBuffer.Block block)
     {
-        foreach (var kv in _dictionary)
+        lock (_dictionaryLock)
         {
-            if (kv.Value.Playing)
+            foreach (var kv in _dictionary)
             {
-                ProcessNote(block, kv.Value);
+                if (kv.Value.Playing)
+                {
+                    ProcessNote(block, kv.Value);
+                }
             }
         }
-        while (_releasingQueue.TryDequeue(out ReleaseState? state))
+        lock (_queueLock)
         {
-            if (state.Playing)
+            while (_releasingQueue.TryDequeue(out ReleaseState? state))
             {
-                ProcessRelease(block, state);
                 if (state.Playing)
-                    _releasingSwap.Enqueue(state);
+                {
+                    ProcessRelease(block, state);
+                    if (state.Playing)
+                        _releasingSwap.Enqueue(state);
+                }
             }
+            (_releasingQueue, _releasingSwap) = (_releasingSwap, _releasingQueue);
         }
-        (_releasingQueue, _releasingSwap) = (_releasingSwap, _releasingQueue);
     }
 
     private void ProcessRelease(WaveBuffer.Block block, ReleaseState state)
@@ -110,10 +118,17 @@ public class Basic : ISynth
 
     public void NoteOff(string name, int number, int velocity)
     {
-        if (NormalizeNoteNumber(number) is int note)
+        PlayState state;
+        lock (_dictionaryLock)
         {
-            var state = _dictionary[note];
-            state.Playing = false;
+            if (NormalizeNoteNumber(number) is int note)
+            {
+                state = _dictionary[note];
+                state.Playing = false;
+            }
+        }
+        lock (_queueLock)
+        {
             _releasingQueue.Enqueue(
                 new ReleaseState(
                     amplitude: state.Amplitude,
@@ -126,18 +141,21 @@ public class Basic : ISynth
 
     public void NoteOn(string name, int number, int velocity)
     {
-        if (NormalizeNoteNumber(number) is int note)
+        lock (_dictionaryLock)
         {
-            if (_dictionary.TryGetValue(note, out PlayState? value))
+            if (NormalizeNoteNumber(number) is int note)
             {
-                value.NoteOn(Amplitude(velocity));
-            }
-            else
-            {
-                _dictionary[note] = new PlayState(
-                    frequency: _scale.Frequency(note),
-                    amplitude: Amplitude(velocity)
-                );
+                if (_dictionary.TryGetValue(note, out PlayState? value))
+                {
+                    value.NoteOn(Amplitude(velocity));
+                }
+                else
+                {
+                    _dictionary[note] = new PlayState(
+                        frequency: _scale.Frequency(note),
+                        amplitude: Amplitude(velocity)
+                    );
+                }
             }
         }
     }

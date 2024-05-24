@@ -8,6 +8,8 @@ public partial class Session : ISampleProvider
 
     public int Read(float[] buffer, int offset, int count)
     {
+        if (_waveBuffer is null)
+            return 0;
         for (int i = 0; i < count; i++)
         {
             buffer[offset++] = (float)_waveBuffer.NextSample();

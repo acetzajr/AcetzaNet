@@ -13,28 +13,29 @@ public partial class Session : IBlockHandler
 
     void ProcessBlocks(object? state)
     {
-        _mutex.WaitOne();
-        bool working = true;
-        while (working)
+        lock (_blocksLock)
         {
-            if (_blocks.TryDequeue(out WaveBuffer.Block? block))
+            bool working = true;
+            while (working)
             {
-                foreach (var synth in _synths)
+                if (_blocks.TryDequeue(out WaveBuffer.Block? block))
                 {
-                    synth.BeginProcess(block);
+                    foreach (var synth in _synths)
+                    {
+                        synth.BeginProcess(block);
+                    }
+                    foreach (var synth in _synths)
+                    {
+                        synth.EndProcess(block);
+                    }
+                    block.Ready = true;
+                    working = false;
                 }
-                foreach (var synth in _synths)
-                {
-                    synth.EndProcess(block);
-                }
-                block.Ready = true;
-                working = false;
             }
         }
-        _mutex.ReleaseMutex();
     }
 
-    private readonly Mutex _mutex;
-    private readonly WaveBuffer _waveBuffer;
+    private WaveBuffer? _waveBuffer;
     private readonly ConcurrentQueue<WaveBuffer.Block> _blocks = new();
+    private readonly object _blocksLock = new();
 }
