@@ -40,7 +40,6 @@ public class Basic : ISynth
     private readonly double _releaseDecrement = MzMath.FromDB(-45);
     private Queue<ReleaseState> _releasingQueue = [];
     private Queue<ReleaseState> _releasingSwap = [];
-    private readonly Primitive _primitive = Primitives.Sin;
     private readonly object _dictionaryLock = new();
     private readonly object _queueLock = new();
 
@@ -85,7 +84,7 @@ public class Basic : ISynth
             }
             var time = state.Time + Constants.FrameRate.IndexToTime(frame);
             var part = time * state.Frequency % 1.0;
-            var sample = _primitive(part) * state.Amplitude * _amplitude;
+            var sample = WaveForm(part) * state.Amplitude * _amplitude;
             foreach (var channel in block.Channels)
             {
                 block[frame, channel] += sample;
@@ -100,13 +99,18 @@ public class Basic : ISynth
         {
             var time = state.Time + Constants.FrameRate.IndexToTime(frame);
             var part = time * state.Frequency % 1.0;
-            var sample = _primitive(part) * state.Amplitude * _amplitude;
+            var sample = WaveForm(part) * state.Amplitude * _amplitude;
             foreach (var channel in block.Channels)
             {
                 block[frame, channel] += sample;
             }
         }
         state.Time += Constants.FrameRate.IndexToTime(block.FramesCount);
+    }
+
+    private static double WaveForm(double part)
+    {
+        return Primitives.Sqr(part) + Primitives.Saw(part) / 2;
     }
 
     public void EndProcess(WaveBuffer.Block block) { }
