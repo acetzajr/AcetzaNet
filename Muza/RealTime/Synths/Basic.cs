@@ -37,7 +37,8 @@ public class Basic : ISynth
     private readonly Scale _scale = Scale.Acetza();
     private readonly Dictionary<int, PlayState> _dictionary = [];
     private readonly double _amplitude = 1.0 / 8;
-    private readonly double _releaseDecrement = MzMath.FromDB(-45);
+    private readonly double _releaseDecrement = MzMath.FromDB(-40);
+    private readonly double _releaseEpsilon = MzMath.FromDB(-20);
     private Queue<ReleaseState> _releasingQueue = [];
     private Queue<ReleaseState> _releasingSwap = [];
     private readonly object _dictionaryLock = new();
@@ -72,12 +73,10 @@ public class Basic : ISynth
 
     private void ProcessRelease(WaveBuffer.Block block, ReleaseState state)
     {
-        //Console.WriteLine($"state.Amplitude: {state.Amplitude}");
-        //Console.WriteLine($"_releaseDecrement: {_releaseDecrement}");
         for (int frame = 0; frame < block.FramesCount; frame++)
         {
-            state.Amplitude -= _releaseDecrement;
-            if (state.Amplitude < 0)
+            state.Amplitude -= _releaseDecrement * state.Amplitude;
+            if (state.Amplitude < _releaseEpsilon)
             {
                 state.Playing = false;
                 return;

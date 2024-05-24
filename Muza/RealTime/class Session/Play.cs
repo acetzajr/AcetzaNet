@@ -9,7 +9,7 @@ public partial class Session
         _waveOut = new WaveOutEvent();
         _waveOut.DesiredLatency = 64;
         _waveBuffer = new WaveBuffer(
-            1,
+            2,
             (int)Math.Ceiling(_waveOut.DesiredLatency * Constants.FrameRate.Value / 1000.0)
         );
         _waveBuffer.BlockRequested += BlockEventHandler;
@@ -42,7 +42,7 @@ public partial class Session
             return false;
         }
         Console.WriteLine($"PlaybackLatency: {_asio.PlaybackLatency}");
-        _waveBuffer = new WaveBuffer(1, _asio.PlaybackLatency);
+        _waveBuffer = new WaveBuffer(2, _asio.PlaybackLatency);
         _waveBuffer.BlockRequested += BlockEventHandler;
         _asio.Init(this);
         _asio.Play();

@@ -100,7 +100,6 @@ public class WaveBuffer
         {
             if (TryAdvance())
                 return Current[_sampleIndex++];
-            // Console.WriteLine("in need");
             return 0;
         }
         return Current[_sampleIndex++];
